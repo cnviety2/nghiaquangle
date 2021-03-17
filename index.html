@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Phong cách Guchill</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body class="container">
+    <div class="jumbotron">
+        <h1>Đời chỉ được hỏi,ko được ngả</h1>
+        <p>Muốn được chill như anh ? Muốn được đỉnh như anh ? Đâu có được em,nhưng dùng cách nói của anh thì được</p>
+        <a href="https://www.youtube.com/watch?v=_uG0GdgTXNo&t=24s">Mấy đứa ủng hộ anh Nghỉa làm utube nhen</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="text-black">Nhập vào bên dưới:</p>
+            <textarea id="txtInput">
+
+            </textarea>
+        </div>
+        <div class="col-md-4 ml-5" id="col-convert">
+            <button class="btn btn-dark ml-5" id="btnConvert">Chuyển</button>
+            <button class="btn btn-dark" id="btnCopy">Copy</button>
+        </div>
+        <div class="col-md-2">
+            <p class="text-black">Nghỉa style:</p>
+            <textarea id="txtOutput" readonly>
+
+            </textarea>
+        </div>
+    </div>
+    <script>
+        var txtOutput = document.getElementById('txtOutput');
+        var txtInput = document.getElementById('txtInput');
+        var btnConvert = document.getElementById('btnConvert');
+
+        var spinner = document.createElement('img');
+        spinner.src = 'Spinner-1s-200px.svg';
+        spinner.setAttribute('height', '40px');
+        spinner.setAttribute('id', 'spinner');
+
+        var btnCopy = document.getElementById('btnCopy');
+
+        btnConvert.onclick = function () {
+            var colConvert = document.getElementById('col-convert').appendChild(spinner);
+            fetch('https://nghiaquangle.herokuapp.com/kwangLee', {
+                method: 'post',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'content': txtInput.value })
+            }).then(response => response.json())
+                .then(data => {
+                    txtOutput.value = data.content;
+                    spinner.parentNode.removeChild(spinner);
+                });
+        }
+
+        btnCopy.onclick = function () {
+            /* Get the text field */
+            var copyText = document.getElementById("txtOutput");
+
+            /* Select the text field */
+            copyText.focus();
+            copyText.select();
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            alert("Đã copy");
+        }
+    </script>
+    <style>
+        body {
+            background-image: url('./images/157715874_1179239449167034_5543032174990520795_n.jpg');
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <!-- Thư viện jquery đã nén phục vụ cho bootstrap.min.js  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Thư viện popper đã nén phục vụ cho bootstrap.min.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+    <!-- Bản js đã nén của bootstrap 4, đặt dưới cùng trước thẻ đóng body-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
