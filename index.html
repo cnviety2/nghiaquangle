@@ -19,6 +19,8 @@
         <h1>Đời chỉ được hỏi,ko được ngả</h1>
         <p>Muốn được chill như anh ? Muốn được đỉnh như anh ? Đâu có được em,nhưng dùng cách nói của anh thì được</p>
         <a href="https://www.youtube.com/watch?v=_uG0GdgTXNo&t=24s">Mấy đứa ủng hộ anh Nghỉa làm utube nhen</a>
+        <p></p>
+        <a href="baotang.html" >Bảo tàng anh Nghỉa</a>
     </div>
 
     <div class="row">
@@ -52,6 +54,7 @@
         var btnCopy = document.getElementById('btnCopy');
 
         btnConvert.onclick = function () {
+            btnConvert.setAttribute('disabled','disabled');
             var colConvert = document.getElementById('col-convert').appendChild(spinner);
             fetch('https://nghiaquangle.herokuapp.com/kwangLee', {
                 method: 'post',
@@ -64,6 +67,7 @@
                 .then(data => {
                     txtOutput.value = data.content;
                     spinner.parentNode.removeChild(spinner);
+                    btnConvert.removeAttribute('disabled');
                 });
         }
 
