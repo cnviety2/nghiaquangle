@@ -20,7 +20,7 @@
         <p>Muốn được chill như anh ? Muốn được đỉnh như anh ? Đâu có được em,nhưng dùng cách nói của anh thì được</p>
         <a href="https://www.youtube.com/watch?v=_uG0GdgTXNo&t=24s">Mấy đứa ủng hộ anh Nghỉa làm utube nhen</a>
         <p></p>
-        <a href="baotang.html" >Bảo tàng anh Nghỉa</a>
+        <a href="baotang.html">Bảo tàng anh Nghỉa</a>
     </div>
 
     <div class="row">
@@ -41,6 +41,15 @@
             </textarea>
         </div>
     </div>
+
+    <iframe width="500" height="200" src="https://www.youtube.com/embed/tht9T-pgCLQ" title="YouTube video player"
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+
+    <audio src="./audio/l-a-u-d-a-i-t-i-n-h-c-h-i-l-l-f-t-simon-lee.mp3" autoplay>
+        <p>asd</p>
+    </audio>
     <script>
         var txtOutput = document.getElementById('txtOutput');
         var txtInput = document.getElementById('txtInput');
@@ -54,7 +63,7 @@
         var btnCopy = document.getElementById('btnCopy');
 
         btnConvert.onclick = function () {
-            btnConvert.setAttribute('disabled','disabled');
+            btnConvert.setAttribute('disabled', 'disabled');
             var colConvert = document.getElementById('col-convert').appendChild(spinner);
             fetch('https://nghiaquangle.herokuapp.com/kwangLee', {
                 method: 'post',
