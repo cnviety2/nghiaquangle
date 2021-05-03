@@ -43,14 +43,26 @@
     </div>
 
     <div class="row mt-3">
-        <h2>Copypasta anh nghỉa</h2>
+
+        <div class="col-md-5">
+            <h2>Copypasta anh nghỉa</h2>
+        </div>
     </div>
     <div class="row mt-3">
-        <select class="custom-select" id="selectCopypasta">
-            <option>con me may</option>
-            <option>con me may</option>
-            <option>con me may</option>
-        </select>
+
+        <div class="col-md-10" id="col-copypasta">
+            <select class="custom-select" id="selectCopypasta">
+            </select>
+            <button class="btn btn-dark ml-3" id="btnCopypasta">Xem copypasta</button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-5">
+            <textarea class="form-control z-depth-1" readonly id="txtOutputCopypasta"></textarea>
+        </div>
+        <div class="col-md-5">
+            <button class="btn btn-dark ml-3" id="btnCopyCopypasta">Copy</button>
+        </div>
     </div>
 
     <div class="row mt-3">
@@ -115,8 +127,45 @@
 
     <script>
         var txtOutput = document.getElementById('txtOutput');
+        var txtOutputCopypasta = document.getElementById('txtOutputCopypasta');
         var txtInput = document.getElementById('txtInput');
         var btnConvert = document.getElementById('btnConvert');
+        var selectCopypasta = document.getElementById('selectCopypasta');
+        var btnCopypasta = document.getElementById('btnCopypasta');
+        var btnCopyCopypasta = document.getElementById('btnCopyCopypasta');
+
+
+        async function fetchCategories() {
+            var categories = await fetch('https://nghiaquangle.herokuapp.com/copypasta/get-all-category').then(response => response.json()).then(data => categories = data.listContent);
+            for (var i = 0; i < categories.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = categories[i];
+                opt.innerHTML = categories[i];
+                selectCopypasta.appendChild(opt);
+            }
+        }
+        fetchCategories();
+        btnCopypasta.onclick = () => {
+            btnCopypasta.setAttribute('disabled', 'disabled');
+            var colCopypasta = document.getElementById('col-copypasta');
+            colCopypasta.appendChild(spinner);
+            fetch('https://nghiaquangle.herokuapp.com/copypasta/get', {
+                method: 'post',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 'content': selectCopypasta.value })
+            }).then(response => response.json())
+                .then(data => {
+                    txtOutputCopypasta.value = data.content;
+                    btnCopypasta.removeAttribute('disabled');
+                    spinner.parentNode.removeChild(spinner);
+                }).catch(error => {
+                    btnCopypasta.removeAttribute('disabled');
+                    spinner.parentNode.removeChild(spinner);
+                })
+        }
 
         var spinner = document.createElement('img');
         spinner.src = 'Spinner-1s-200px.svg';
@@ -127,7 +176,8 @@
 
         btnConvert.onclick = function () {
             btnConvert.setAttribute('disabled', 'disabled');
-            var colConvert = document.getElementById('col-convert').appendChild(spinner);
+            var colConvert = document.getElementById('col-convert');
+            colConvert.appendChild(spinner);
             fetch('https://nghiaquangle.herokuapp.com/kwangLee', {
                 method: 'post',
                 credentials: 'same-origin',
@@ -140,12 +190,15 @@
                     txtOutput.value = data.content;
                     spinner.parentNode.removeChild(spinner);
                     btnConvert.removeAttribute('disabled');
+                }).catch(error => {
+                    btnConvert.removeAttribute('disabled');
+                    spinner.parentNode.removeChild(spinner);
                 });
         }
 
-        btnCopy.onclick = function () {
+        function copyAction(elementId) {
             /* Get the text field */
-            var copyText = document.getElementById("txtOutput");
+            var copyText = document.getElementById(elementId);
 
             /* Select the text field */
             copyText.focus();
@@ -157,6 +210,9 @@
             /* Alert the copied text */
             alert("Đả copy");
         }
+
+        btnCopyCopypasta.onclick = () => { copyAction('txtOutputCopypasta'); }
+        btnCopy.onclick = () => { copyAction('txtOutput') };
     </script>
     <style>
         body {
