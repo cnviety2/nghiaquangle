@@ -94,7 +94,7 @@
                 btnSend.removeAttribute('disabled');
                 return;
             }
-            fetch('http://localhost:8080/email/send', {
+            fetch('https://nghiaquangle.herokuapp.com/email/send', {
                 method: 'post',
                 credentials: 'same-origin',
                 headers: {
