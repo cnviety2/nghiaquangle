@@ -21,6 +21,8 @@
         <a href="https://www.youtube.com/watch?v=_uG0GdgTXNo&t=24s">Mấy đứa ủng hộ anh Nghỉa làm utube nhen</a>
         <p></p>
         <a href="baotang.html">Bảo tàng anh Nghỉa</a>
+        <p></p>
+        <a href="send-email.html">Gửi thư cho idol</a>
     </div>
 
     <div class="row">
@@ -165,6 +167,16 @@
                     btnCopypasta.removeAttribute('disabled');
                     spinner.parentNode.removeChild(spinner);
                 })
+        }
+
+        function sendEmail(){
+            fetch('https://nghiaquangle.herokuapp.com/email/send',{
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },body: JSON.stringify({'content':'Fan anh Nghỉa lâu năm','subject':'Chào anh Nghỉa'})
+            }).then(response => response.json()).then(data => {console.log(data)})
         }
 
         var spinner = document.createElement('img');
