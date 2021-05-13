@@ -56,11 +56,11 @@
                                         <h5>Thông điệp của bạn</h5>
                                         <div class="mt-4 inputs"> <input id="txtSubject" type="text"
                                                 class="form-control" placeholder="Tựa đề mail"><textarea id="txtContent"
-                                                class="form-control"
-                                                placeholder="Nội dung gửi tới anh Nghỉa" required></textarea> </div>
+                                                class="form-control" placeholder="Nội dung gửi tới anh Nghỉa"
+                                                required></textarea> </div>
                                         <div class="button mt-4 text-left">
                                             <div class="g-recaptcha"
-                                                data-sitekey="6LfN0LcaAAAAAPNJYzSRp0GYge4nZaUAGvURzHBT"></div><button
+                                                data-sitekey="6Lc50bcaAAAAADx4y-ObuICDheUfty9DwOzXkPMZ"></div><button
                                                 id="btnSend" class="btn btn-dark">Send</button>
                                         </div>
                                     </div>
@@ -86,43 +86,54 @@
 
         let btnSend = document.getElementById('btnSend');
         btnSend.onclick = () => {
-            var txtContent = document.getElementById('txtContent');
-            var txtSubject = document.getElementById('txtSubject');
-            btnSend.setAttribute('disabled', 'disabled');
-            if (txtContent == '') {
-                alert('Nội dung không được trống nhaaaaa');
-                btnSend.removeAttribute('disabled');
+            var response = grecaptcha.getResponse();
+            if (response.length == 0) {
+                alert('Click vô cái captcha coi');
                 return;
-            }
-            fetch('https://nghiaquangle.herokuapp.com/email/send', {
-                method: 'post',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 'content': txtContent.value, 'subject': txtSubject.value })
-            }).then(response => response.json())
-                .then(data => {
-                    if (data.message == 'OK') {
-                        alert('Thông điệp của bạn đã được gửi tới anh Nghỉa,mong là ảnh không treo cổ khi nhận đc');
-                        btnSend.removeAttribute('disabled');
-                        txtContent.value = '';
-                        txtSubject.value = '';
-                        return;
-                    } else if (data.message == 'CONTENT IS NULL') {
-                        alert('Nội dung ko có đc trống');
-                        btnSend.removeAttribute('disabled');
-                        return;
-                    }
-                    else {
-                        alert('Thông điệp bạn gửi chưa thành công,gửi lại ik');
-                        btnSend.removeAttribute('disabled');
-                        return;
-                    }
-                }).catch(err => {
-                    alert('Lỗi server òy,đợi chút ik');
+            } else {
+                var txtContent = document.getElementById('txtContent');
+                var txtSubject = document.getElementById('txtSubject');
+                btnSend.setAttribute('disabled', 'disabled');
+                if (txtContent == '') {
+                    alert('Nội dung không được trống nhaaaaa');
                     btnSend.removeAttribute('disabled');
-                });
+                    grecaptcha.reset();
+                    return;
+                }
+                fetch('https://nghiaquangle.herokuapp.com/email/send', {
+                    method: 'post',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 'content': txtContent.value, 'subject': txtSubject.value })
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.message == 'OK') {
+                            alert('Thông điệp của bạn đã được gửi tới anh Nghỉa,mong là ảnh không treo cổ khi nhận đc');
+                            btnSend.removeAttribute('disabled');
+                            txtContent.value = '';
+                            txtSubject.value = '';
+                            grecaptcha.reset();
+                            return;
+                        } else if (data.message == 'CONTENT IS NULL') {
+                            alert('Nội dung ko có đc trống');
+                            btnSend.removeAttribute('disabled');
+                            grecaptcha.reset();
+                            return;
+                        }
+                        else {
+                            alert('Thông điệp bạn gửi chưa thành công,gửi lại ik');
+                            btnSend.removeAttribute('disabled');
+                            grecaptcha.reset();
+                            return;
+                        }
+                    }).catch(err => {
+                        alert('Lỗi server òy,đợi chút ik');
+                        btnSend.removeAttribute('disabled');
+                        grecaptcha.reset();
+                    });
+            }
         }
     </script>
 
